@@ -1,11 +1,15 @@
 import dotenv
 import os
-from flask import Flask, redirect, url_for, session,render_template,request
+from flask import Flask, redirect, url_for, session,request
 from authlib.integrations.flask_client import OAuth
 from web3 import Web3 
 
 dotenv.load_dotenv()
 kyc_info_path = os.getcwd() + "/kyc_info/"
+# create kycpath if not exist
+if not os.path.exists(kyc_info_path):
+    os.mkdir(kyc_info_path)
+
 github_client_id = os.getenv("GITHUB_CLIENT_ID")
 github_client_secret = os.getenv("GITHUB_CLIENT_SECRET")
 
