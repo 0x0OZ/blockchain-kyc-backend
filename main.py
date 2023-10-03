@@ -18,7 +18,7 @@ github_access_token_url = 'https://github.com/login/oauth/access_token'
 github_scope = {'scope': 'read:user'}
 github_client_kwargs={'token_endpoint_auth_method': 'client_secret_basic'}
 github_api_base_url='https://api.github.com/user'
-website_base_url = 'http://192.2.1.3/'
+website_base_url = os.getenv("WEBSITE_BASE_URL")
 
 app = Flask(__name__)
 app.secret_key = "thisissecret"
