@@ -33,18 +33,9 @@ github_oauth.register(
     api_base_url=github_api_base_url,
 )
 
-@app.route('/index')
-@app.route('/')
-def home():
-    return render_template('index.html')
-
 @app.route('/<path:path>')
 def catch_all(path):
-    return 'Error : Path not found, You want path: %s' % path
-
-@app.route('/kycrequest')
-def kycrequest():
-    return render_template('login.html')
+    return {'status': 'error', 'message': 'Not found'}
 
 @app.route('/auth/github')
 def auth_github():
@@ -63,7 +54,6 @@ def github_callback():
     session['github'] = user
     
     session['github']['username'] = user['login']
-    # store_kyc_info(user['login'],user['email'],'github')
     return redirect('/kyc', code=302)
 
 @app.route('/logout')
@@ -117,6 +107,7 @@ def api(platform, username):
         account_sig = Web3.solidity_keccak(['string','bytes32'],[username,crypto_address]).hex()
         j = {"username":username,"crypto_address":crypto_address,"account_sig":account_sig}
         return j
+    return {'status': 'error', 'message': 'Not found','account_sig':''}
 
 def store_kyc_info(username,crypto_address,platform_name):
     path = kyc_info_path + platform_name
@@ -129,8 +120,3 @@ def store_kyc_info(username,crypto_address,platform_name):
 if __name__ == '__main__':
     from waitress import serve
     serve(app, host="0.0.0.0", port=5000)
-    # app.run(host="0.0.0.0", port=5000)
-    # app.run(host="0.0.0.0", port=5000,debug=True,ssl_context=('/etc/nginx/certificate/nginx-certificate.crt', '/etc/nginx/certificate/nginx.key'))
-    
-    
-    
